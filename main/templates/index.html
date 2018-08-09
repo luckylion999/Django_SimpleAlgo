@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form id="submit" method="POST">
+        {% csrf_token %}
+        Algo name:
+        <input type="text" name="algo_name">
+        <br>
+        Signal:
+        <input type="text" name="signal">
+        <br>
+        Trade
+        <input type="text" name="trade">
+        <br>
+        Ticker
+        <input type="text" name="ticker">
+        <br>
+        <input id="submit" type="submit" value="Submit">
+    </form>
+    <form action="">
+        <input type="submit" value="Algo Table">
+    </form>
+    {% if algo_list %}
+        <table class="table">
+            <tr>
+                <th>Algo Name</th>
+                <th>Average PnL</th>
+            </tr>
+            {% for algo in algo_list %}
+                <tr>
+                    <td><a href="/plot?id={{ algo.id }}">{{ algo.algo_name }}</a></td>
+                    <td>{{ algo.avg_pnl }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if plt %}
+        {{ plt.show }}
+    {% endif %}
+
+{% endblock %}
