@@ -3,6 +3,9 @@ from django.http import HttpResponse
 from .utils import algo_result
 from .models import Algo
 import requests
+
+import matplotlib
+matplotlib.use('agg')
 import matplotlib.pyplot as plt
 
 
