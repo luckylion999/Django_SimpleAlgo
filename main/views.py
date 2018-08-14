@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from .utils import algo_result
 from .models import Algo
 import requests
