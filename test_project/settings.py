@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'oww(f3c3ffb)_@g5ql4!k9)vyo+q_-qjkl856g*$4k85u_86_*'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -57,22 +57,22 @@ WSGI_APPLICATION = 'test_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'algo',
-#         'USER': 'postgres',
-#         'PASSWORD': 'pass1234',
-#         'HOST': '127.0.0.1',
-#         'PORT': '5432',
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default=config('DATABASE_URL')
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'algo',
+        'USER': 'postgres',
+        'PASSWORD': 'pass1234',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+    }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=config('DATABASE_URL')
+#     )
+# }
 
 
 # Password validation

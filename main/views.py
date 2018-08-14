@@ -5,8 +5,12 @@ from .models import Algo
 import requests
 
 import matplotlib
+import PIL, PIL.Image
 matplotlib.use('agg')
-import matplotlib.pyplot as plt
+from matplotlib import pylab
+from django.http import HttpResponse
+from io import BytesIO
+from pylab import *
 
 
 def index(request):
@@ -18,32 +22,38 @@ def index(request):
         }
     )
 
-
 def plot(request):
     plot_id = request.GET.get('id')
+    algo_list = Algo.objects.all()
     if plot_id:
-        algo_list = Algo.objects.all()
         current_algo = Algo.objects.get(id=plot_id)
         positions_y = current_algo.positions
         positions_x = [i for i in range(1, len(positions_y) + 1)]
         pnl_y = current_algo.daily_pnl
         pnl_x = [i for i in range(1, len(pnl_y) + 1)]
 
-        plt.figure(1)
-        plt.title('Positions Chart')
-        plt.plot(positions_x, positions_y)
-        plt.figure(2)
-        plt.title('PNL Chart')
-        plt.plot(pnl_x, pnl_y)
+        fig = pylab.figure()
+        fig.add_subplot(2, 2, 1)
+        pylab.plot(positions_x, positions_y)
+        fig.add_subplot(2, 2, 2)
+        pylab.plot(pnl_x, pnl_y)
 
-        return render(
-            request, 'index.html',
-            {
-                'algo_list': algo_list,
-                'plt': plt
-            }
-        )
+        buffer = BytesIO()
+        canvas = pylab.get_current_fig_manager().canvas
+        canvas.draw()
+        pilImage = PIL.Image.frombytes("RGB", canvas.get_width_height(), canvas.tostring_rgb())
+        pilImage.save(buffer, "PNG")
+        pylab.close()
 
+        return HttpResponse(buffer.getvalue(), content_type="image/png")
+
+    return render(
+        request, 'index.html',
+        {
+            'algo_list': algo_list,
+            'plt': plt
+        }
+    )
 
 def save_data(request):
     algo_name = request.POST.get('algo_name')
